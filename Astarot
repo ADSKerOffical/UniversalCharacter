@@ -1,3 +1,87 @@
+local function defense()
+character = game.Players.LocalPlayer.Character
+ff = Instance.new("ForceField", character)
+ff.Visible = false
+ repeat task.wait()
+  character.Humanoid.Health = math.huge
+  character.Humanoid.MaxHealth = math.huge
+  for _, child in pairs(character:GetChildren()) do
+    if child:IsA("BasePart") then
+      child.Massless = false
+      child.CustomPhysicalProperties = PhysicalProperties.new(math.huge, math.huge, math.huge) 
+    end
+  end
+ until character.Humanoid.Health <= 0
+end
+
+local function effect()
+Highlight = Instance.new("Highlight")
+        Highlight.Parent = game.Players.LocalPlayer.Character
+        Highlight.Adornee = game.Players.LocalPlayer.Character
+        Highlight.FillTransparency = 0
+        Highlight.FillColor = Color3.fromRGB(0,0,0)
+        Highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+        Highlight.OutlineTransparency = 0
+        Highlight.DepthMode = "Occluded"
+        
+        local player = game.Players.LocalPlayer
+local function removeAccessories()
+    for _, accessory in ipairs(player.Character:GetChildren()) do
+handle = accessory:FindFirstChild("Handle")
+        if accessory:IsA("Accessory") and accessory.Handle:FindFirstChild("FaceFrontAttachment") then
+            accessory:Destroy()
+        end
+    end
+end
+
+removeAccessories()
+
+fireParticles = Instance.new("ParticleEmitter")
+fireParticles.Name = "FireLine"
+fireParticles.Enabled = true
+fireParticles.Lifetime = NumberRange.new(0.5, 1)
+fireParticles.Rate = 100
+fireParticles.Rotation = NumberRange.new(0, 360)
+fireParticles.RotSpeed = NumberRange.new(-180, 180)
+fireParticles.Size = NumberSequence.new(2, 0)
+fireParticles.Speed = NumberRange.new(5, 10)
+fireParticles.SpreadAngle = Vector2.new(5, 5)
+fireParticles.Color = ColorSequence.new(Color3.fromRGB(1, 1, 1), Color3.fromRGB(0, 0, 0))
+fireParticles.Texture = "rbxassetid://243098098"
+fireParticles.Parent = game.Players.LocalPlayer.Character.Head
+
+fireParticles = Instance.new("ParticleEmitter")
+fireParticles.Name = "FireLine"
+fireParticles.Enabled = true
+fireParticles.Color = ColorSequence.new(Color3.fromRGB(1, 1, 1), Color3.fromRGB(0, 0, 0))
+fireParticles.Lifetime = NumberRange.new(0.5, 1)
+fireParticles.Rate = 100
+fireParticles.Rotation = NumberRange.new(0, 360)
+fireParticles.RotSpeed = NumberRange.new(-180, 180)
+fireParticles.Size = NumberSequence.new(1, 0)
+fireParticles.Speed = NumberRange.new(5, 10)
+fireParticles.SpreadAngle = Vector2.new(5, 5)
+fireParticles.Texture = "rbxassetid://243098098"
+fireParticles.Parent = game.Players.LocalPlayer.Character["Right Arm"]
+
+fireParticles = Instance.new("ParticleEmitter")
+fireParticles.Name = "FireLine"
+fireParticles.Enabled = true
+fireParticles.Lifetime = NumberRange.new(0.5, 1)
+fireParticles.Rate = 100
+fireParticles.Color = ColorSequence.new(Color3.fromRGB(1, 1, 1), Color3.fromRGB(0, 0, 0))
+fireParticles.Rotation = NumberRange.new(0, 360)
+fireParticles.RotSpeed = NumberRange.new(-180, 180)
+fireParticles.Size = NumberSequence.new(1, 0)
+fireParticles.Speed = NumberRange.new(5, 10)
+fireParticles.SpreadAngle = Vector2.new(5, 5)
+fireParticles.Texture = "rbxassetid://243098098"
+fireParticles.Parent = game.Players.LocalPlayer.Character["Left Arm"]
+end
+
+coroutine.wrap(effect)()
+coroutine.wrap(defense)()
+
 local Players = game:GetService("Players")
 
 local tool = Instance.new("Tool", Players.LocalPlayer.Backpack)
@@ -30,16 +114,13 @@ k:AdjustSpeed(1.5)
     local function onTouch(hit)
         if hit.Parent:FindFirstChild("Humanoid") and hit.Parent ~= game.Players.LocalPlayer.Character then
             hit.Parent.Humanoid:TakeDamage(math.huge)
-        elseif hit:IsA("Part") then
-            hit.Color = Color3.fromRGB(0, 0, 0)
-            wait(10)
-            hit.Color = Color3.fromRGB(150, 150, 150)
+            hit.Parent.Humanoid.RootPart.Velocity = shootDirection * 200
         end
     end
 
     projectile.Touched:Connect(onTouch)
 
-    wait(10)
+    task.wait(10)
     projectile:Destroy()
 end
 
@@ -70,20 +151,30 @@ local TweenService = game:GetService("TweenService")
 
 local function createSpikes()
     for i = 1, numUzumaki do
+    sg = math.random(5, 15)
         spike = Instance.new("Part")
         spike.Name = "Spike"
-        spike.Size = Vector3.new(2.5, 6, 2.5)
+        spike.Size = Vector3.new(2.5, sg, 2.5)
         spike.Color = Color3.fromRGB(0, 0, 0)
         spike.Anchored = true
         spike.CanCollide = true
         spike.Parent = workspace
         spike.Position = humanoidRootPart.Position + (i * spacing * playerForward) + Vector3.new(0, -travelDistance, 0)
 
+Spooky = Instance.new("Sound", spike)
+Spooky.Name = "Spike Wall"
+Spooky.SoundId = "rbxassetid://236382703"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+
         spike.Touched:Connect(function(hit)
             if hit.Parent ~= char then
                 local humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
                 if humanoid then
                     humanoid:TakeDamage(math.huge)
+                    humanoid.RootPart.Anchored = true
                 end
             end
         end)
@@ -135,10 +226,10 @@ local function createExplosionWave()
 
     explosionWave.Position = character.HumanoidRootPart.Position
 
-    parts = workspace:GetPartsInPart(explosionWave)
+  parts = workspace:GetPartsInPart(explosionWave)
     for _, part in pairs(parts) do
-        if part.Parent ~= character then
-            local direction = (part.Position - character.HumanoidRootPart.Position).Unit
+        if part.Parent ~= player then
+            direction = (part.Position - character.HumanoidRootPart.Position).Unit
             part:ApplyImpulse(direction * WAVE_FORCE)
         end
     end
@@ -148,6 +239,108 @@ local function createExplosionWave()
 end
 
         createExplosionWave()
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local tool = Instance.new("Tool")
+tool.Name = "Reverse Black Hole"
+tool.RequiresHandle = false
+
+tool.Activated:Connect(function()
+local player = game.Players.LocalPlayer
+
+local function launchNeonPart()
+    neonPart = Instance.new("Part")
+    neonPart.Name = "NeonPart"
+    neonPart.Size = Vector3.new(35, 35, 35)
+    neonPart.Shape = Enum.PartType.Ball
+    neonPart.Color = Color3.fromRGB(25, 25, 25)
+    neonPart.Transparency = 0
+    neonPart.Material = Enum.Material.Neon
+    neonPart.CanCollide = false
+    neonPart.Parent = workspace
+    neonPart.CFrame = player.Character.HumanoidRootPart.CFrame
+    
+    Spooky = Instance.new("Sound", neonPart)
+Spooky.Name = "Hollow Hole"
+Spooky.SoundId = "rbxassetid://1146691360"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+
+    partTween = game:GetService("TweenService"):Create(neonPart, TweenInfo.new(10, Enum.EasingStyle.Linear), {
+        Position = neonPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * 10000
+    })
+    partTween:Play()
+ neonPart.Touched:Connect(function(hit)
+        if hit.Parent:FindFirstChildOfClass("Humanoid") then
+            humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
+            if humanoid.Parent ~= player.Character then
+ humanoid.RootPart.Velocity = (humanoid.RootPart.Position - neonPart.Position).Unit * 999
+                humanoid:TakeDamage(math.huge)
+            end
+        end
+    end)
+
+    wait(10)
+    neonPart:Destroy()
+end
+
+    launchNeonPart()
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local tool = Instance.new("Tool")
+tool.Name = "Freezing"
+tool.RequiresHandle = false
+
+tool.Activated:Connect(function()
+local localPlayer = game.Players.LocalPlayer
+
+function freezeHumanoids()
+    for _, humanoid in ipairs(game.Workspace:GetDescendants()) do
+        if humanoid:IsA("Humanoid") and humanoid.Parent ~= localPlayer.Character then
+            humanoid.RootPart.Anchored = true
+        end
+    end
+    Spooky = Instance.new("Sound", game.Workspace)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://1770550108"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+end
+
+function unfreezeAndKnockback()
+    for _, humanoid in ipairs(game.Workspace:GetDescendants()) do
+        if humanoid:IsA("Humanoid") and humanoid.Parent ~= localPlayer.Character then
+            maxHealth = humanoid.MaxHealth
+            humanoid:TakeDamage(maxHealth / 4)
+            humanoid.RootPart.Anchored = false
+            knockbackForce = 999
+            humanoid.RootPart.Velocity = localPlayer.Character.PrimaryPart.CFrame.LookVector * knockbackForce
+        end
+    end
+    Spooky = Instance.new("Sound", game.Workspace)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://5859341051"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+end
+
+local function runScript()
+    freezeHumanoids()
+    wait(6)
+    unfreezeAndKnockback()
+end
+
+runScript()
 end)
 
 tool.Parent = game.Players.LocalPlayer.Backpack
