@@ -1,0 +1,153 @@
+local Players = game:GetService("Players")
+
+local tool = Instance.new("Tool", Players.LocalPlayer.Backpack)
+tool.Name = "Black spike"
+tool.RequiresHandle = false
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+local function onActivated()
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://186934753"
+local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1.5)
+
+    shootDirection = character.PrimaryPart.CFrame.LookVector
+    projectile = Instance.new("Part")
+    projectile.Name = "BlackShip"
+    projectile.Size = Vector3.new(2.5, 2.5, 7)
+    projectile.Color = Color3.fromRGB(0, 0, 0)
+    projectile.Anchored = false
+    projectile.CanCollide = true
+    projectile.Parent = workspace
+
+    projectile.CFrame = character.PrimaryPart.CFrame * CFrame.new(0, 0, -5)
+    projectile.Velocity = shootDirection * 300
+
+    local function onTouch(hit)
+        if hit.Parent:FindFirstChild("Humanoid") and hit.Parent ~= game.Players.LocalPlayer.Character then
+            hit.Parent.Humanoid:TakeDamage(math.huge)
+        elseif hit:IsA("Part") then
+            hit.Color = Color3.fromRGB(0, 0, 0)
+            wait(10)
+            hit.Color = Color3.fromRGB(150, 150, 150)
+        end
+    end
+
+    projectile.Touched:Connect(onTouch)
+
+    wait(10)
+    projectile:Destroy()
+end
+
+tool.Activated:Connect(onActivated)
+
+local tool = Instance.new("Tool")
+tool.Name = "Spike Road"
+tool.RequiresHandle = false
+
+tool.Activated:Connect(function()
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = char:WaitForChild("HumanoidRootPart")
+local playerForward = humanoidRootPart.CFrame.LookVector
+
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://111898867"
+local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(2.5)
+    task.wait(0.45)
+
+local numUzumaki = 40
+local spacing = 4
+local travelDistance = 10
+
+local TweenService = game:GetService("TweenService")
+
+local function createSpikes()
+    for i = 1, numUzumaki do
+        spike = Instance.new("Part")
+        spike.Name = "Spike"
+        spike.Size = Vector3.new(2.5, 6, 2.5)
+        spike.Color = Color3.fromRGB(0, 0, 0)
+        spike.Anchored = true
+        spike.CanCollide = true
+        spike.Parent = workspace
+        spike.Position = humanoidRootPart.Position + (i * spacing * playerForward) + Vector3.new(0, -travelDistance, 0)
+
+        spike.Touched:Connect(function(hit)
+            if hit.Parent ~= char then
+                local humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid:TakeDamage(math.huge)
+                end
+            end
+        end)
+
+        local tweenInfo = TweenInfo.new(
+            0,
+            Enum.EasingStyle.Quad,
+            Enum.EasingDirection.Out,
+            0,
+            false,
+            0
+        )
+
+        local targetPosition = humanoidRootPart.Position + (i * spacing * playerForward)
+        local tween = TweenService:Create(spike, tweenInfo, {Position = targetPosition})
+        tween:Play()
+        tween.Completed:Wait()
+
+        game.Debris:AddItem(spike, 3)
+    end
+end
+
+createSpikes()
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local tool = Instance.new("Tool")
+tool.Name = "Repulsion Wave"
+tool.RequiresHandle = false
+
+tool.Activated:Connect(function()
+local WAVE_RADIUS = 30
+WAVE_FORCE = 3000
+
+local function createExplosionWave()
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    explosionWave = Instance.new("Part")
+    explosionWave.Name = "ExplosionWave"
+    explosionWave.Size = Vector3.new(WAVE_RADIUS * 2, WAVE_RADIUS, WAVE_RADIUS * 2)
+    explosionWave.Anchored = true
+    explosionWave.CanCollide = false
+    explosionWave.Color = Color3.fromRGB(255, 255, 255)
+    explosionWave.Transparency = 1
+    explosionWave.Parent = workspace
+
+    explosionWave.Position = character.HumanoidRootPart.Position
+
+    parts = workspace:GetPartsInPart(explosionWave)
+    for _, part in pairs(parts) do
+        if part.Parent ~= character then
+            local direction = (part.Position - character.HumanoidRootPart.Position).Unit
+            part:ApplyImpulse(direction * WAVE_FORCE)
+        end
+    end
+
+    wait(2)
+    explosionWave:Destroy()
+end
+
+        createExplosionWave()
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
