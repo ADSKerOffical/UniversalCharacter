@@ -173,7 +173,7 @@ Spooky:Play()
                 local humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
                 if humanoid then
                     humanoid:TakeDamage(math.huge)
-                    humanoid.RootPart.Anchored = true
+                    humanoid.RootPart.Velocity = Vector3.new(0, 25, 0)
                 end
             end
         end)
@@ -481,6 +481,7 @@ game.Debris:AddItem(neonPart, 10)
             if humanoid.Parent ~= player.Character then
  humanoid.RootPart.Velocity = (humanoid.RootPart.Position - neonPart.Position).Unit * 999
                 humanoid:TakeDamage(math.huge)
+                humanoid:Destroy()
             end
         end
     end)
