@@ -99,6 +99,8 @@ local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimatio
 k:Play()
 k:AdjustSpeed(1.5)
 
+game.Debris:AddItem(projectile, 10)
+
     shootDirection = character.PrimaryPart.CFrame.LookVector
     projectile = Instance.new("Part")
     projectile.Name = "BlackShip"
@@ -119,9 +121,6 @@ k:AdjustSpeed(1.5)
     end
 
     projectile.Touched:Connect(onTouch)
-
-    task.wait(10)
-    projectile:Destroy()
 end
 
 tool.Activated:Connect(onActivated)
@@ -470,6 +469,7 @@ Spooky.Volume = 1
 Spooky.PlaybackSpeed = 1
 Spooky.Looped = false
 Spooky:Play()
+game.Debris:AddItem(neonPart, 10)
 
     partTween = game:GetService("TweenService"):Create(neonPart, TweenInfo.new(10, Enum.EasingStyle.Linear), {
         Position = neonPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * 10000
@@ -484,9 +484,6 @@ Spooky:Play()
             end
         end
     end)
-
-    wait(10)
-    neonPart:Destroy()
 end
 
     launchNeonPart()
