@@ -173,7 +173,7 @@ Spooky:Play()
                 local humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
                 if humanoid then
                     humanoid:TakeDamage(math.huge)
-                    humanoid.RootPart.Velocity = Vector3.new(0, 25, 0)
+                    humanoid.RootPart.Velocity = Vector3.new(0, 75, 0)
                 end
             end
         end)
@@ -472,16 +472,15 @@ Spooky:Play()
 game.Debris:AddItem(neonPart, 10)
 
     partTween = game:GetService("TweenService"):Create(neonPart, TweenInfo.new(10, Enum.EasingStyle.Linear), {
-        Position = neonPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * 10000
+        Position = neonPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * 5000
     })
     partTween:Play()
  neonPart.Touched:Connect(function(hit)
         if hit.Parent:FindFirstChildOfClass("Humanoid") then
             humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
             if humanoid.Parent ~= player.Character then
- humanoid.RootPart.Velocity = (humanoid.RootPart.Position - neonPart.Position).Unit * 999
+ humanoid.RootPart.Velocity = (humanoid.RootPart.Position - neonPart.Position).Unit * 1500
                 humanoid:TakeDamage(math.huge)
-                humanoid:Destroy()
             end
         end
     end)
