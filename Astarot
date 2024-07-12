@@ -203,6 +203,207 @@ end)
 tool.Parent = game.Players.LocalPlayer.Backpack
 
 local tool = Instance.new("Tool")
+tool.Name = "Speed Boost"
+tool.RequiresHandle = false
+tool.ToolTip = "Press again to turn off high speed"
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local player = game.Players.LocalPlayer
+local originalSpeed = player.Character.Humanoid.WalkSpeed
+
+local function increaseSpeed()
+    player.Character.Humanoid.WalkSpeed = originalSpeed * 6
+end
+
+local function resetSpeed()
+    player.Character.Humanoid.WalkSpeed = originalSpeed
+end
+
+tool.Activated:Connect(function()
+    if player.Character.Humanoid.WalkSpeed == originalSpeed then
+        increaseSpeed()
+    else
+        resetSpeed()
+    end
+end)
+
+local attackCount = 0
+local canAttack = true
+
+local attackRadius = 15
+
+local function CreateDamageHitbox()
+    hitbox = Instance.new("Part")
+    hitbox.Name = "AttackHitbox"
+    hitbox.Size = Vector3.new(5, 5, 5)
+    hitbox.Anchored = true
+    hitbox.CanCollide = false
+    hitbox.Transparency = 1
+    hitbox.Color = Color3.fromRGB(255, 0, 0)
+    hitbox.Parent = game.Workspace
+    return hitbox
+end
+
+local function Attack()
+    if canAttack then
+        attackCount = attackCount + 1
+   local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://186934753"
+local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1.5)
+        hitbox = CreateDamageHitbox()
+        hitbox.Position = game.Players.LocalPlayer.Character.Head.Position + game.Players.LocalPlayer.Character.Humanoid.MoveDirection * 3
+        game.Debris:AddItem(hitbox, 0.1)
+        hitbox.Touched:Connect(function(hit)
+            local humanoid = hit.Parent:FindFirstChildWhichIsA("Humanoid")
+            if humanoid then
+                if hit.Parent ~= game.Players.LocalPlayer.Character then
+                    humanoid:TakeDamage(humanoid.MaxHealth / 4)
+                    humanoid.RootPart.Velocity = game.Players.LocalPlayer.Character.PrimaryPart.CFrame.LookVector * 1000
+                    Spooky = Instance.new("Sound", game.Workspace)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://8595980577"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+                end
+            end
+        end)
+        
+        canAttack = false
+        wait(1)
+        canAttack = true
+    end
+end
+
+local tool = Instance.new("Tool")
+tool.Name = "Divine Strike"
+tool.Grip = CFrame.new(0, -1, 0)
+tool.GripForward = Vector3.new(0, 0, 1)
+tool.GripRight = Vector3.new(1, 0, 0)
+tool.GripUp = Vector3.new(0, 1, 0)
+tool.RequiresHandle = false
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+tool.Activated:Connect(Attack)
+
+local tool = Instance.new("Tool")
+tool.Name = "Uncontrollable Void"
+tool.RequiresHandle = false
+
+local function createAndMoveAura()
+    aura = Instance.new("Part")
+    aura.Name = "Aura"
+    aura.Color = Color3.fromRGB(0, 0, 0)
+    aura.Transparency = 0
+    aura.Material = Enum.Material.Neon
+    aura.CanCollide = false
+    
+    game.Debris:AddItem(aura, 5)
+
+    local function moveAura()
+        aura.CFrame = CFrame.new(game.Players.LocalPlayer:GetMouse().Hit.Position)
+    end
+
+    local function onTouch(hit)
+        if hit.Parent and hit.Parent:FindFirstChild("Humanoid") and hit.Parent ~= game.Players.LocalPlayer.Character then
+            local humanoid = hit.Parent:FindFirstChild("Humanoid")
+            local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+            shootDirection = character.PrimaryPart.CFrame.LookVector
+            humanoid:TakeDamage(humanoid.MaxHealth / 100)
+            humanoid.RootPart.Velocity = shootDirection * 10
+        end
+    end
+
+    aura.Touched:Connect(onTouch)
+
+    local connection
+    connection = game:GetService("RunService").Heartbeat:Connect(function()
+        if aura and aura.Parent == game.Workspace then
+            moveAura()
+        else
+            connection:Disconnect()
+        end
+    end)
+
+    aura.Parent = game.Workspace
+
+    while true do
+        local ghj = math.random(1, 30)
+        local hju = math.random(1, 30)
+        local uil = math.random(1, 30)
+        aura.Size = Vector3.new(ghj, hju, uil)
+        task.wait()
+    end
+end
+
+tool.Activated:Connect(function()
+    createAndMoveAura()
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local tool = Instance.new("Tool")
+tool.Name = "Ash"
+tool.RequiresHandle = false
+
+tool.Activated:Connect(function()
+humanoids = game:GetService("Workspace"):GetDescendants()
+
+for _, humanoid in ipairs(humanoids) do
+    if humanoid:IsA("Humanoid") and humanoid.Parent ~= game.Players.LocalPlayer.Character then
+        hitboxContainer = Instance.new("Model")
+        hitboxContainer.Name = "HitboxContainer"
+        hitboxContainer.Parent = humanoid.Parent
+
+        hitbox = Instance.new("Part")
+        hitbox.Name = "Hitbox"
+        hitbox.Size = Vector3.new(2, 2, 2)
+        hitbox.Anchored = true
+        hitbox.CanCollide = false
+        hitbox.Transparency = 1
+        hitbox.Color = Color3.fromRGB(255, 0, 0)
+        hitbox.Parent = hitboxContainer
+
+        fire = Instance.new("Fire")
+        fire.Parent = hitbox
+        fire.Size = 10
+        fire.Heat = 100
+        fire.Color = Color3.fromRGB(0, 0, 0)
+        fire.SecondaryColor = Color3.fromRGB(255, 255, 255)
+
+Spooky = Instance.new("Sound", humanoid)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://128912290"
+Spooky.Volume = 0.3
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+
+        local function updateHitboxPosition()
+            if humanoid and humanoid.Parent then
+                hitbox.CFrame = humanoid.RootPart.CFrame
+               humanoid:TakeDamage(humanoid.MaxHealth / 200)
+            else
+                hitboxContainer:Destroy()
+            end
+        end
+
+        local updateConnection = game:GetService("RunService").Stepped:Connect(updateHitboxPosition)
+
+        humanoid.Died:Connect(function()
+            updateConnection:Disconnect()
+        end)
+    end
+end
+end)
+
+tool.Parent = game.Players.LocalPlayer.Backpack
+
+local tool = Instance.new("Tool")
 tool.Name = "Repulsion Wave"
 tool.RequiresHandle = false
 
