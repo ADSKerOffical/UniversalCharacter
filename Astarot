@@ -542,3 +542,127 @@ runScript()
 end)
 
 tool.Parent = game.Players.LocalPlayer.Backpack
+
+local assetId = tonumber(15156054554)
+if not assetId then
+    warn("Invalid asset ID")
+    return
+end
+
+model = game:GetObjects("rbxassetid://" .. assetId)[1]
+model.Parent = game.Players.LocalPlayer.Backpack
+model.ToolTip = "Sword of Astaroth"
+
+local function onActivated()
+    local ftr = math.random(1, 4)
+    local animId = ""
+    local souid = ""
+    if ftr == 1 then
+        animId = "rbxassetid://74897796"
+        souid = "rbxassetid://12222216"
+    elseif ftr == 2 then
+        animId = "rbxassetid://74894663"
+        souid = "rbxassetid://12222216"
+    elseif ftr == 3 then
+        animId = "rbxassetid://186934658"
+        souid = "rbxassetid://12222216"
+    elseif ftr == 4 then
+        animId = "rbxassetid://186934753"
+        souid = "rbxassetid://12222216"
+    end
+
+    Anim = Instance.new("Animation")
+    Anim.AnimationId = animId
+    local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+    k:Play()
+    k:AdjustSpeed(1)
+    
+    Sound = Instance.new("Sound", game.Workspace)
+Sound.Name = "Slash"
+Sound.Volume = 1
+Sound.SoundId = souid
+Sound.PlaybackSpeed = 1
+Sound.Looped = false
+Sound:Play()
+
+    local function onTouch(hit)
+        if hit.Parent and hit.Parent:FindFirstChild("Humanoid") and hit.Parent ~= game.Players.LocalPlayer.Character then
+            hit.Parent.Humanoid:TakeDamage(math.huge)
+            hit.Parent.Humanoid.RootPart.Velocity = game.Players.LocalPlayer.Character.PrimaryPart.CFrame.LookVector * 350
+        end
+    end
+
+    for _, part in pairs(model:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Touched:Connect(onTouch)
+        end
+    end
+end
+
+for _, part in pairs(model:GetDescendants()) do
+        if part:IsA("BasePart") then
+	    
+        end
+    end
+
+model.Activated:Connect(onActivated)
+
+model.Equipped:Connect(function()
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://94160581"
+local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+end)
+
+local UserInputService = game:GetService("UserInputService")
+
+local function onKeyPressed(input, gameProcessedEvent)
+    if input.KeyCode == Enum.KeyCode.E and not gameProcessedEvent then
+        local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://2954124238"
+local k = game:GetService("Players").LocalPlayer.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+   wait(1)
+     local player = game.Players.LocalPlayer
+
+local function launchNeonPart()
+    neonPart = Instance.new("Part")
+    neonPart.Name = "NeonPart"
+    neonPart.Size = Vector3.new(10, 10, 10)
+    neonPart.Shape = Enum.PartType.Ball
+    neonPart.Color = Color3.fromRGB(0, 0, 0)
+    neonPart.Transparency = 0
+    neonPart.Material = Enum.Material.Neon
+    neonPart.CanCollide = false
+    neonPart.Parent = workspace
+    neonPart.CFrame = player.Character.HumanoidRootPart.CFrame
+
+        fire = Instance.new("Fire", neonPart)
+        fire.Heat = 10
+		fire.Color = neonPart.Color
+		fire.SecondaryColor = Color3.new(0, 0, 0)
+		fire.Size = 100
+
+game.Debris:AddItem(neonPart, 5)
+
+    partTween = game:GetService("TweenService"):Create(neonPart, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+        Position = neonPart.Position + player.Character.HumanoidRootPart.CFrame.LookVector * 700
+    })
+    partTween:Play()
+ neonPart.Touched:Connect(function(hit)
+        if hit.Parent:FindFirstChildOfClass("Humanoid") then
+            local humanoid = hit.Parent:FindFirstChildOfClass("Humanoid")
+            if humanoid.Parent ~= player.Character then
+ humanoid.RootPart.Velocity = (humanoid.RootPart.Position - neonPart.Position).Unit * 500
+                humanoid:TakeDamage(math.huge)
+            end
+        end
+    end)
+end
+
+    launchNeonPart()
+end
+
+UserInputService.InputBegan:Connect(onKeyPressed)
