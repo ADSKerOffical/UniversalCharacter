@@ -108,6 +108,8 @@ game.Debris:AddItem(projectile, 10)
     projectile.Color = Color3.fromRGB(0, 0, 0)
     projectile.Anchored = false
     projectile.CanCollide = true
+    projectile.Material = Enum.Material.Concrete
+    projectile.Shape = Enum.PartType.Wedge
     projectile.Parent = workspace
 
     projectile.CFrame = character.PrimaryPart.CFrame * CFrame.new(0, 0, -5)
@@ -153,10 +155,12 @@ local function createSpikes()
     sg = math.random(5, 15)
         spike = Instance.new("Part")
         spike.Name = "Spike"
-        spike.Size = Vector3.new(2.5, sg, 2.5)
+        spike.Size = Vector3.new(2.5, i, 2.5)
         spike.Color = Color3.fromRGB(0, 0, 0)
         spike.Anchored = true
         spike.CanCollide = true
+        spike.Material = Enum.Material.Concrete
+        spike.Shape = Enum.PartType.Wedge
         spike.Parent = workspace
         spike.Position = humanoidRootPart.Position + (i * spacing * playerForward) + Vector3.new(0, -travelDistance, 0)
 
