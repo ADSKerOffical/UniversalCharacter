@@ -663,6 +663,7 @@ game.Debris:AddItem(neonPart, 5)
 end
 
     launchNeonPart()
+  end
 end
 
 UserInputService.InputBegan:Connect(onKeyPressed)
