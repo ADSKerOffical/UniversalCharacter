@@ -671,3 +671,28 @@ end
 end
 
 UserInputService.InputBegan:Connect(onKeyPressed)
+
+plr = game.Players.LocalPlayer
+hum = plr.Character.Humanoid
+
+local function def1()
+game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding, false)
+hum.AutoRotate = true
+game.Players.LocalPlayer.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+end
+
+local player = game.Players.LocalPlayer
+ player.Character.Humanoid.HealthChanged:Connect(function()
+  Spooky = Instance.new("Sound", game.Players.LocalPlayer)
+Spooky.Name = "Spooky"
+Spooky.SoundId = "rbxassetid://147722227"
+Spooky.Volume = 1
+Spooky.PlaybackSpeed = 1
+Spooky.Looped = false
+Spooky:Play()
+ player.Character.Humanoid.Health = player.Character.Humanoid.MaxHealth
+end)
+
+while wait() do
+def1()
+end
